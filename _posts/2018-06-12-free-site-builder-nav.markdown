@@ -91,8 +91,3 @@ description: useful soft-program.
 
 1，[百度经验-国内外免费PHP开源建站程序一览（最全）](http://jingyan.baidu.com/article/49711c6156fb68fa441b7c2b.html)
 
-* * *
-
-*   [Programmer (10)](/categories.html)
-
-*   [Nav (3)](/tags.html)
