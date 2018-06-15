@@ -1,0 +1,28 @@
+/* #aside-icon {
+	position: fixed;
+	right: 50px;
+	bottom:50px;
+	z-index: 9000;
+}
+ */
+#aside-icon {
+	cursor: pointer;
+    position: fixed;
+    right: 50px;
+    top: -900px;
+    z-index: 2;
+    width: 70px;
+    height: 900px;
+    background: url(../images/scroll.png);
+    transition: all .5s ease-in-out;
+    opacity: 1;
+}
+#aside-icon .backToTop{
+	position: absolute;
+    height: 100px;
+    width: 70px;
+    bottom: 0;
+    text-align: center;
+	color:transparent;
+    cursor: pointer;
+}

@@ -48,6 +48,11 @@ Web
 
 *   [ECSTORE 接口文档](http://club.shopex.cn/doc/ecstore-apis/ecstore/append-a/result.html) \- 接口文档，难找到想要的
 
+*   [ECSTORE 百科全书](http://ecos.phpwindow.com/doc.html) \- ecstore的文档地址，很老的
+
+*   [ECSTORE smarty语法](http://www.phpwindow.com/ecstore_smarty2.html) \- 和上面一样，只有ecstore有用
+
+
 Git
 ---
 
