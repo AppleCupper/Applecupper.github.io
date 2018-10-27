@@ -17,6 +17,31 @@ description: I want to find the lighting further.
 ## 面试经历知识总结
 	
 我喜欢孙荣旭
+### 自己遇到的面试问题
+
+#### PHP
+
+1.经常栽在这个上面，时间函数
+
+	1.在PHP.INI中设置时区，date.timezone = PRC
+	2.在代码中设置时区 
+		date_default_timezone_set('Asia/Shanghai');//'Asia/Shanghai' 亚洲/上海   ini_set('date.timezone','Asia/Shanghai');
+		date_default_timezone_set('PRC');//其中PRC为“中华人民共和国”   ini_set('date.timezone','PRC');
+	3.检查日期的合理性 checkdate(mouth,day,year)
+	4.date() 显示服务器时间，将服务器时间格式化 date("Y-m-d H:i:s", xxx) xxx可以换成strtotime( 0 day   -1 mouth); 例如：显示上个月最后一天 date("Y-m-01", strtotime(' -1 mouth'))
+	5.获取两个日期之间的天数，$d1=strtotime(d1);$d2=strtotime(d2);abs($d1-$d2)/3600/24;
+	6.time返回当前的时间戳，mktime取得一个时间戳mktime(hour,minute,second,mouth,day,year)
+	
+
+#### MySQL
+
+**1.地址三级级联**
+
+	问题：表一addr有id name parentid type 4个字段，表二是accout表 id name（人名） country province city4个字段（百秋）
+	三级级联查出国省市
+	select ad1.name,ad2.name,ad3.name from addr ad1,addr ad2,addr ad3 where ad1.id=ad2.parentid and ad2.id=ad3.parentid(应该是错的，之后在整理)
+	已知一个用户查找他城市名字
+	select name from addr where id in(select )(好吧，暂时没想好)
 
 ## 网上搜索来的面试相关知识
 
@@ -88,7 +113,7 @@ description: I want to find the lighting further.
 	2：git与svn的区别。
 	3：如何进行多分支开发，包括多人开发协同，分段测试，上线。
 	
-###具体的试题
+### 具体的试题
 
 #### PHP部分
 
