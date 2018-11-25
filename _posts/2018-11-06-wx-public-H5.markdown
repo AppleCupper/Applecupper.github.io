@@ -1,0 +1,131 @@
+---
+layout: post
+title:  "微信公众号内H5开发"
+categories: work use 
+tags: WeChat H5
+author: 果果
+description: furture sir，nice to meet you.
+---
+
+微信公众号内容开发
+---
+之前接触过这部分东西，但是从来没有做过记录，感觉都白做了。最不擅长的就是记笔记了，但是也要记录下来。这将是我改变我自己，更进一步吧。之后在陆续更新关于微信的内容。
+___
+写个目录吧：
+
+	1.微信开发常识或者是误区
+	2.微信相关接口内容
+	3.搭建微信本地开发环境(测试账号，正式账号)
+	
+### 1、微信开发开发常识或者是误区
+
+1.公众号内访问页面可以获取到用户的openid，出了公众号获取不到？其实分享出来的还是可以获取到的。用户点击分享的链接，可以不关注公众号也能调用用户信息授权接口。获得用户的nickname，headUrl，sex等。
+
+2.微信网页授权接口，后面加的redirect_url的参数，最后回传的页面链接为
+
+	http://redirect.page.com?code=hfjkbhsdjkfhkhsdfh&state=STATE
+	
+在编辑redirect——url时候可以在？后面带上一些参数。
+
+3.&state=STATE有时候会有问题出现，把完成路径单做查询字符串传到后台的时候，因为没有对这个路径进行encodeURLComponent，后台将&state=STATE当成一个查询字符串的参数。encodeURIComponent(localtion.href.split(#)[0])即可。这个未验证过或者是忘记了
+
+4.好多东西都忘记了，先写到这把
+
+### 2、微信相关接口内容
+
+#### 1.网页授权接口
+	https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect
+
+关于网页授权的两种scope的区别说明
+	1、以snsapi_base为scope发起的网页授权，是用来获取进入页面的用户的openid的，并且是**静默授权**并自动跳转到回调页的。用户感知的就是直接进入了回调页（往往是业务页面）
+	2、以snsapi_userinfo为scope发起的网页授权，是用来获取用户的基本信息的。但这种授权需要**用户手动同意**，并且由于用户同意过，所以**无须关注**，就可在授权后获取该用户的基本信息。
+	3、用户管理类接口中的“获取用户基本信息接口”，是在用户和公众号产生消息交互或关注后事件推送后，才能根据用户OpenID来获取用户基本信息。这个接口，包括其他微信接口，都是需要该用户（即openid）关注了公众号后，才能调用成功的。
+	4、对于已关注公众号的用户，如果用户从公众号的会话或者自定义菜单进入本公众号的网页授权页，即使是scope为snsapi_userinfo，也是静默授权，用户无感知。
+	
+	5、snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid），snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且， 即使在未关注的情况下，只要用户授权，也能获取其信息 ）
+	
+用户同意授权之后，跳转至 redirect_uri/?code=CODE&state=STATE
+
+	code说明 ： code作为换取access_token的票据，每次用户授权带上的code将不一样，code只能使用一次，5分钟未被使用自动过期。
+	
+#### 2.获取access_token，网页授权第二步
+
+scope=snsapi_userinfo时候，会返回code值，通过get得到。请求下面的链接：
+
+	https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
+
+	appid		是	公众号的唯一标识
+	secret		是	公众号的appsecret
+	code		是	填写第一步获取的code参数
+	grant_type	是	填写为authorization_code
+	
+返回的数据里面带有access_token和open_id
+
+	{ "access_token":"ACCESS_TOKEN",
+	"expires_in":7200,
+	"refresh_token":"REFRESH_TOKEN",
+	"openid":"OPENID",
+	"scope":"SCOPE" }
+	
+#### 3.拉去用户信息，网页授权第三步
+
+访问这个链接
+
+	http：GET（请使用https协议） https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
+	
+正确时返回的JSON数据包如下：
+
+	{    "openid":" OPENID",
+	" nickname": NICKNAME,
+	"sex":"1",
+	"province":"PROVINCE"
+	"city":"CITY",
+	"country":"COUNTRY",
+	"headimgurl":    "http://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46",
+	"privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],
+	"unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"
+	}
+
+	
+	参数		描述
+	openid		用户的唯一标识
+	nickname	用户昵称
+	sex			用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+	province	用户个人资料填写的省份
+	city		普通用户个人资料填写的城市
+	country		国家，如中国为CN
+	headimgurl		用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空。若用户更换头像，原有头像URL将失效。
+	privilege	用户特权信息，json 数组，如微信沃卡用户为（chinaunicom）
+	unionid		只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
+	
+上面网页授权用户信息的3个步骤里面内容，省略了保存access_token和刷新的步骤，暂时存在session里面。以后懂的更多了，再说。
+
+#### 4.js-sdk接口
+
+	根据开发文档生成正确的config配置就ok，关键是细心
+	
+### 3、搭建微信本地开发环境(测试账号，正式账号)
+
+[测试账号](https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index)比较好用，拥有全部的权限，可以走完流程
+
+微信开发需要外网环境，所以本地开发需要内网穿刺功能，或者有外网的端口的话做一个端口映射，需要80端口。内网穿刺的话可以去弄一个natapp，或者花生壳都行，我用的是natapp，就是变域名有点烦，每次都要重新配置。
+
+主要配置一下几个部分
+![js-sdk安全域名](https://applecupper.github.io/assets/images/wxchat1.png)
+![用户授权基本信息接口](https://applecupper.github.io/assets/images/wxchat2.png)
+![用户授权基本信息接口](https://applecupper.github.io/assets/images/wxchat3.png)
+配置链接，不加http://也不加主域名后的内容直接applecupper.github.io这样写就可以
+
+本地一般代码里可能需要对nginx.conf或者appache的vhosts进行配置，配置获得的域名。代码里面根据你动态域名的变动而改变，所以有个小钱的话买个静态的舒服很多。
+
+正式环境：
+
+jssdk安全域名设置
+![js-sdk安全域名](https://applecupper.github.io/assets/images/wxchat4.png)
+在接口权限里配置用户授权基本信息接口的链接地址、在开发基本配置里面配置白名单和，appsecret
+
+
+
+
+
+
