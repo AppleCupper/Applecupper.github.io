@@ -7,7 +7,7 @@ author: 果果
 description: good good study, day day up.
 ---
 
-Web
+教程文档
 ---
 
 *   [W3cplus](https://www.w3cplus.com/) \- 前端技术
@@ -15,6 +15,10 @@ Web
 *   [W3school](http://www.w3school.com.cn/index.html) \- 中文站点，教程
 
 *   [PHP](http://www.php.net/manual/zh/) \- PHP中文手册
+
+*   [VIM](https://coolshell.cn/articles/5426.html) \-VIM 练级教程
+
+*   [php-redis](http://www.cnblogs.com/ikodota/archive/2012/03/05/php_redis_cn.html) -\PHP-redis 中文手册
 
 *   [W3cschool](http://www.w3cschool.com.cn/index.html) \- 中文站点，教程
 
@@ -24,6 +28,8 @@ Web
 
 在线工具
 ----
+
+*   [https://codepen.io/](https://codepen.io/) \- 在线前端编辑器
 
 *   [https://tool.lu/](https://tool.lu/) \- 好用的工具集
 
