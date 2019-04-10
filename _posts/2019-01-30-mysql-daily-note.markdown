@@ -6,9 +6,79 @@ tags: mysql note
 author: 果果
 description: To get more knowledge.
 ---
+数据库常用操作
+___
 很多数据库的操作都是重复的，无法避免的使用sql语句，为什么不记下来呢，方便又好用。还能巩固记忆，一举多得。:smile:感觉基本是在抄w3c，抄就抄吧，总能记点东西。
 
-___
+### 导入导出数据库也很常用啊
+
+导出：
+    
+    SELECT ... INTO OUTFILE：和LOAD DATA INFILE互逆
+
+    mysql>select * from table into outfile '/root/dir/file.txt'将数据导出到文件
+
+    mysql>select * from table into outfile '/root/dir/file.txt'
+        ->fields terminated by ',' enclosed by '"'
+        ->lines terminated by '\r\n';//将数据导出为csv格式
+
+    mysqldump：
+
+    $ mysqldump -u root -p --no-create-info \ --tab=/tmp RUNOOB runoob_tbl
+
+    $ mysqldump -u root -p database table > dump.sql 导出表和数据
+    password ******
+
+    $ mysqldump -u root -p -d database table > dump.sql 仅仅导出表结构
+    password ******
+
+    $ mysqldump -u root -p RUNOOB > database_dump.txt //导出整个数据库数据
+    password ******
+
+    $ mysqldump -u root -p --all-databases > database_dump.txt 
+    password ******             //备份数据库策略
+
+导入：
+
+    1、mysql 命令导入
+    $ mysql -uroot -p123456 < runoob.sql
+
+    2、source 命令导入
+    mysql> use database;
+    mysql> source /home/abc/abc.sql
+
+    3、使用 LOAD DATA 导入数据,指定LOCAL关键词，则表明从客户主机上按路径读取文件,没有指定，则文件在服务器上按路径读取文件。
+    mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl;
+
+    mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl
+      -> FIELDS TERMINATED BY ':'
+      -> LINES TERMINATED BY '\r\n';
+
+    mysql> LOAD DATA LOCAL INFILE 'dump.txt' //指定插入顺序
+    -> INTO TABLE mytbl (b, c, a);
+
+    4、使用 mysqlimport 导入数据
+    $ mysqlimport -u root -p --local database_name dump.txt
+    password *****
+
+    $ mysqlimport -u root -p --local --fields-terminated-by=":" \
+    --lines-terminated-by="\r\n"  database_name dump.txt
+    password *****
+
+    $ mysqlimport -u root -p --local --columns=b,c,a \
+    database_name dump.txt
+    password *****
+
+### mysql show命令
+
+常用简单的问题：
+
+    show databases,show tables,show columns from table,show index from table
+
+    查询问题3剑客
+    show profile(s);默认关闭需要打开set profiling=1;
+    show status; -- 显示一些系统特定资源的信息，例如，正在运行的线程数量。
+    show processlist; -- 显示系统中正在运行的所有进程
 
 ### 删库跑路 Drop、Truncate & delete
 
@@ -180,6 +250,9 @@ DROP CONSTRAINT MyUniqueConstraint;
 >ALTER TABLE table_name 
 DROP INDEX MyUniqueConstraint;
 
+修改自增id的默认开始值
+>alter table users AUTO_INCREMENT=123456
+
 ### 不同语句的组合
 
 SELECT INTO  语句从一个表复制数据，然后把数据插入到另一个新表中
@@ -204,6 +277,21 @@ create....like组合，复制表->可以复制主键和自增等，但是不能�
 
     FROM_UNIXTIME(time, "%Y-%m-%d") 将时间戳换位时间
     UNIX_TIMESTAMP - 转化为时间戳，可以用来计算时间前后
+    DATE_ADD(date,INTERVAL expr type) 函数向日期添加指定的时间间隔。
+    DATE_SUB(date,INTERVAL expr type) 函数向日期减去指定的时间间隔。
+        -SELECT OrderId,DATE_ADD(OrderDate,INTERVAL 45 DAY) AS OrderPayDate FROM Orders
+
+    DATEDIFF(date1,date2) 函数返回两个日期之间的天数。
+    DATE_FORMAT(date,format) 函数用于以不同的格式显示日期/时间数据。区别FROM_UNIXTIME，一个参数是日期，一个是时间戳
+
+    NOW() 返回当前的日期和时间。
+    CURDATE() 返回当前的日期。
+    CURTIME() 返回当前的时间。
+    SELECT NOW(),CURDATE(),CURTIME()
+
+    DATE() 函数提取日期或日期/时间表达式的日期部分。
+    EXTRACT(unit FROM date) 函数用于返回日期/时间的单独部分，比如年、月、日、小时、分钟
+
 
 常用计算函数，参数是列中取得的参数，返回单个值
     
@@ -225,9 +313,29 @@ create....like组合，复制表->可以复制主键和自增等，但是不能�
     NOW() - 返回当前的系统日期和时间
     FORMAT(column_name,format) - 格式化某个字段的显示方式
 
-其他
+连接函数
 
-    CONCAT('','') 将两个字符串链接成一个字符串
+    CONCAT('','') 将两个字符串链接成一个字符串，如有任何一个参数为NULL ，则返回值为 NULL。
+
+    CONCAT_WS(separator,str1,str2,...) separator是分隔符，每个链接中都会添加分隔符。如果，分隔符是null返回null，函数忽略分隔符后面任意为null的参数
+
+    group_concat group_concat([DISTINCT] 要连接的字段 [Order BY ASC/DESC 排序字段] [Separator '分隔符'])默认逗号分隔
+
+    repeat() -复制字符串，select repeat('ab',2);->abab
+
+截取字符串
+
+    left(content,length) -left（被截取字段，截取长度） 从左开始截取字符串 
+    right(str, length) -right（被截取字段，截取长度） 从右开始截取字符串 
+    substring(str, pos,[length]) substring（被截取字段，从第几位开始截取，截取长度)
+
+其他：
+
+    CHARSET() 查出字符类型
+
+更多函数：
+
+[mysql函数](http://www.runoob.com/mysql/mysql-functions.html)
 
 ### 通用数据类型
 
