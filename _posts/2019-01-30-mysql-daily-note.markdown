@@ -10,6 +10,46 @@ description: To get more knowledge.
 ___
 很多数据库的操作都是重复的，无法避免的使用sql语句，为什么不记下来呢，方便又好用。还能巩固记忆，一举多得。:smile:感觉基本是在抄w3c，抄就抄吧，总能记点东西。
 
+### 数据库点滴积累
+
+#### 新建数据库配置
+
+	mysqld.conf
+	sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+
+	SELECT @@GLOBAL.sql_mode;
+	set GLOBAL sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION ';
+
+	SELECT @@SESSION.sql_mode;
+	set SESSION sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION ';
+
+	STRICT_TRANS_TABLES： 在该模式下，如果一个值不能插入到一个事务表中，则中断当前的操作，对非事务表不做限制
+	NO_ZERO_IN_DATE： 在严格模式下，不允许日期和月份为零
+	NO_ZERO_DATE： 设置该值，mysql数据库不允许插入零日期，插入零日期会抛出错误而不是警告。
+	ERROR_FOR_DIVISION_BY_ZERO：在INSERT或UPDATE过程中，如果数据被零除，则产生错误而非警告。如 果未给出该模式，那么数据被零除时MySQL返回NULL
+	NO_AUTO_CREATE_USER： 禁止GRANT创建密码为空的用户
+	NO_ENGINE_SUBSTITUTION： 如果需要的存储引擎被禁用或未编译，那么抛出错误。不设置此值时，用默认的存储引擎替代，并抛出一个异常
+	PIPES_AS_CONCAT： 将"||"视为字符串的连接操作符而非或运算符，这和Oracle数据库是一样的，也和字符串的拼接函数Concat相类似
+	ANSI_QUOTES： 启用ANSI_QUOTES后，不能用双引号来引用字符串，因为它被解释为识别符
+	NO_AUTO_VALUE_ON_ZERO： 该值影响自增长列的插入。默认设置下，插入0或NULL代表生成下一个自增长值。如果用户 希望插入的值为0，而该列又是自增长的，那么这个选项就有用了。
+
+#### replace into语句
+
+replace into 跟 insert 功能类似，不同点在于：replace into 首先尝试插入数据到表中， 1. 如果发现表中已经有此行数据（根据主键或者唯一索引判断）则先删除此行数据，然后插入新的数据。 2. 否则，直接插入新数据。
+
+要注意的是：插入数据的表必须有主键或者是唯一索引！否则的话，replace into 会直接插入数据，这将导致表中出现重复的数据。
+
+	MySQL replace into 有三种形式：
+	1. replace into tbl_name(col_name, ...) values(...)
+	2. replace into tbl_name(col_name, ...) select ...
+	3. replace into tbl_name set col_name=value, ...
+
+第一种形式类似于insert into的用法，
+
+第二种replace select的用法也类似于insert select，这种用法并不一定要求列名匹配，事实上，MYSQL甚至不关心select返回的列名，它需要的是列的位置。例如，replace into tb1( name, title, mood) select rname, rtitle, rmood from tb2;?这个例子使用replace into从?tb2中将所有数据导入tb1中。
+
+第三种replace set用法类似于update set用法，使用一个例如“SET col_name = col_name + 1”的赋值，则对位于右侧的列名称的引用会被作为DEFAULT(col_name)处理。因此，该赋值相当于SET col_name = DEFAULT(col_name) + 1
+
 ### 导入导出数据库也很常用啊
 
 导出：
