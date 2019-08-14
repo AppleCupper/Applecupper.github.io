@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Xdebug和phpstorm的配置联调（失败版）"
+title:  "Xdebug和phpstorm的配置联调"
 categories: PHP IDE 
 tags: xdebug php
 author: 果果
@@ -9,6 +9,8 @@ description: Not all questions have an answer，but it will has.
 Xdebug和phpstorm的配置联调（失败版）
 ---
 为了让var_dump好看一点，我在虚拟机配置了xdebug。既然这些都配置了，为啥不一步到位开始快乐的调试模式呢。然后一天过去了，还是没有结果。为了以后能有空接着这次的配置做下去，我把当前的情况记录一下。就酱。。。
+
+更新了一下PHPSTORM的激活码就可以了，可能我找了个正版的激活码吧，感谢
 
 手动目录：
     
@@ -52,13 +54,19 @@ ___
 
 ### 2.win7的phpstorm远程配置ubuntu的lnmp环境
 
-因为本篇没有配置成功，配置是错的，这里的意义不大。网上人云亦云，我看的是很蒙蔽，把百度第一页的n种方法都尝试之后依然没有我想要的结果。
+我想说，这个phpstorm我更新了一下激活码，然后就可以了，好吧，可能还是我没搞懂，可以调试了真开心。
+
+（改）因为本篇没有配置成功，配置是错的，这里的意义不大。网上人云亦云，我看的是很蒙蔽，把百度第一页的n种方法都尝试之后依然没有我想要的结果。
 
 总结下来无非都是配置下面的几点：
 
-1.setting->debug->xdebug端口号
+1.setting->debug->xdebug端口号 和remote_port保持一致
 
-2.setting->debug->dbgp proxy
+2.setting->debug->dbgp proxy 这里配置项目访问的端口，可以写ip也可以写域名
+
+    PHPSTROM
+    local.twad.hrgame.com.cn
+    80
 
 3.setting->server配置
 
