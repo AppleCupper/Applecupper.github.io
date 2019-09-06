@@ -50,6 +50,36 @@ replace into 跟 insert 功能类似，不同点在于：replace into 首先尝�
 
 第三种replace set用法类似于update set用法，使用一个例如“SET col_name = col_name + 1”的赋值，则对位于右侧的列名称的引用会被作为DEFAULT(col_name)处理。因此，该赋值相当于SET col_name = DEFAULT(col_name) + 1
 
+#### 数据库按照指定顺序排序
+
+    order by FIELD(value ,order1,order2,order3...)
+
+#### 查找json内部字段
+
+    select param->$.type as type...
+
+#### case when语句使用
+
+可以用来将同一列的不同数据分列，也可以生成数字值用来排序
+
+    select 
+        case type
+            when 1 then 'a'
+            when 2 then 'b'
+            else result
+        end
+
+    例：
+    select uid，
+        sum(case cse_name where '数学' then `score` else 0 end) math,
+        sum(case cse_name where '英语' then `score` else 0 end) english,
+        sum(case cse_name where '语文' then `score` else 0 end) chinese,
+    from
+        course
+    group by 
+        uid
+
+
 ### 导入导出数据库也很常用啊
 
 导出：
