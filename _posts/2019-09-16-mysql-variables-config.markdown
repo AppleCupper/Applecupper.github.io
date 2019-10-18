@@ -39,6 +39,35 @@ ___
     [{FROM | IN} db_name]
     [LIKE 'pattern' | WHERE expr]
 
+6.显示CREATE DATABASE 创建命名数据库的语句。
+
+    SHOW CREATEE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name
+
+7.显示创建表的语法
+
+    SHOW CREATE TABLE tbl_name
+
+8.显示创建事件语法
+
+    SHOW CREATE EVENT event_name
+
+9.显示创建功能语法SHOW CREATE FUNCTION语法,显示有关存储函数的信息
+
+    SHOW CREATE FUNCTION func_name
+
+10.显示创建过程语法,它返回可用于重新创建命名存储过程的确切字符串
+
+    SHOW CREATE PROCEDURE proc_name
+
+11.显示创建触发器的语法
+
+    SHOW CREATE TRIGGER trigger_name
+
+12.显示创建用户的语法
+
+    SHOW CREATE USER user
+
+
 ### 写在前面，防止忘记
 
 不需要order by默认排序的话可以加上order by null
