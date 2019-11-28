@@ -91,29 +91,6 @@ description: There is always something I don't understand.
         $xml_result = $this->postXmlCurl($xmlData, 'https://api.mch.weixin.qq.com/pay/unifiedorder', 60);
         $result = $this->xmlToArray($xml_result);
         return $result;
-        // var_dump($result);
-        /*
-           array(9) {
-              ["return_code"]=>
-              string(7) "SUCCESS"
-              ["return_msg"]=>
-              string(2) "OK"
-              ["appid"]=>
-              string(18) "wx2d4fefcfe1a39c9b"
-              ["mch_id"]=>
-              string(10) "1420537902"
-              ["nonce_str"]=>
-              string(16) "JASf0yXVuPknKm2J"
-              ["sign"]=>
-              string(32) "BE3CF30459D01660BB9AB2DE0AD023CE"
-              ["result_code"]=>
-              string(7) "SUCCESS"
-              ["prepay_id"]=>
-              string(36) "wx29154208585459f31c6875691178935371"
-              ["trade_type"]=>
-              string(5) "JSAPI"
-            }
-        */
     }
 
 ### 微信支付流程
