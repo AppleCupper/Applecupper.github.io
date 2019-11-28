@@ -105,3 +105,30 @@ description: There is always something I don't understand.
 [微信支付](https://pay.weixin.qq.com/wiki/doc/api/index.html)
 
 [小程序支付](https://developers.weixin.qq.com/miniprogram/dev/api/open-api/payment/wx.requestPayment.html)
+
+### 小程序开发遇到的小问题
+
+#### cover-view 和cover-image
+
+这两个标签上面有诸多的样式不支持，目前已知：
+
+    渐变背景色
+    不支持删除线
+    不支持：after和：before伪类
+
+#### customer-tab-bar
+
+通过这种方式切换tabbar，并且给tabbar传值
+
+    selectTabbar() {
+        if (typeof this.getTabBar === 'function' &&
+          this.getTabBar()) {
+          this.getTabBar().setData({
+            selected: 0
+          })
+        }
+      },
+
+#### wxml不能使用js的str函数的解决方案
+
+使用<wxs><wxs>标签包含的js函数来解决问题
