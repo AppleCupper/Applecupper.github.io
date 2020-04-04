@@ -601,8 +601,7 @@ description: I will hava more and more new technical.
     _browser=openWebSignIn(_url,_account,_passward,_name)
     #植入js抓取数据
     dict=webScraper(_browser,_account)
-    # _account='qianweiliang15@163.com'
-    # dict={}
+
     print dict
     sleep(5)
     path='C:\\data\\wechatScraper\\datadown\\'+_account+'\\'+time.strftime('%Y%m%d',time.localtime(time.time()))+'\\'
