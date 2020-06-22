@@ -61,5 +61,12 @@ description: A good memory is better than a bad pen.
 ssh连接远程，除了使用xshell可以使用ide的命令工具
 >ssh -p 22 guoguo@192.168.11.41 -> 输入yes -> 输入密码连接成功
 
+查看磁盘的大小和查看当前目录大小
+>df -lh
+>du -sh
+
+使用非root打开vim时，已经编辑好了，可以用下面的命令
+>:w !sudo tee %
+
 
 
