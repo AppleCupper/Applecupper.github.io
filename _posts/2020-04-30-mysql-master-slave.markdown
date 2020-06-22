@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "mysql出从复制实践"
+title:  "mysql主从复制实践"
 categories: mysql
 tags: mysql study
 author: 果果
